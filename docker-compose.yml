@@ -1,0 +1,44 @@
+version: "3.11"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_DB=ecommerce_database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=7034
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+    command: >
+         sh -c "python manage.py wait_for_db &&
+                python manage.py migrate &&
+                python manage.py runserver 0.0.0.0:8000"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend:/frontend
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - ecommerce_database:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=ecommerce_database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=7034
+    container_name: ecommerce_database
+volumes:
+  ecommerce_database:
