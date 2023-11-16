@@ -3,14 +3,13 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin,RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,DestroyModelMixin
 from .models import Product, Category, ShippingAddress,Order, OrderItem, Transactions
-from .serializers import ProductSerializer, CategorySerializer, ShippingAddressSerializer, OrderSerializer, TransactionSerializer
+from .serializers import ProductSerializer, CategorySerializer, ShippingAddressSerializer, OrderSerializer, TransactionSerializer, OrderItemSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-import logging
-from .razorpay.main import RazorpayClient
-client = RazorpayClient()
+from django.conf import settings
+import razorpay
 
 # Create your views here.
 
@@ -95,13 +94,6 @@ class OrderView(APIView):
         shipping_address = get_object_or_404(ShippingAddress, shid=shipping_address_id)
         totalPrice = data['totalPrice']
         print(totalPrice)
-        ##Razorpay
-
-        order_payment_amt = client.create_order(
-            amount= totalPrice,
-            currency= 'INR',
-        )
-        print(order_payment_amt)
 
         order = Order.objects.create(
             user = user,
@@ -130,40 +122,73 @@ class OrderView(APIView):
 
             order_items.append(order_item)
 
-            # Transactions.objects.create(
-            #     order=order,
-            #     amount=totalPrice,
-            #     payment_id = data.get('payment_id'),
-            #     signature = data.get("signature")
-            # )
-            # client.verify_payment_signature(
-            #     razorpay_payment_id = data.get("payment_id"),
-            #     razorpay_order_id = order,
-            #     razorpay_signature = data.get("signature")
-            # )
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class RazorpayOrderView(APIView):
+    """This API will create an order"""
+
+    def post(self, request):
+
+        global client
+        data = request.data
+
+        amount = int(float(data['amount']))
+
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,
+                                        settings.RAZORPAY_KEY_SECRET))
+
+        data = {"amount" : amount, "currency" : "INR"}
+        payment = client.order.create(data=data)
+
+        return Response({'order_id': payment['id'], 'amount': payment['amount'], 'currency':payment['currency']})
+
 class TransactionView(APIView):
     def post(self, request):
-        transaction_data = request.data
-        transaction_serializer = TransactionSerializer(data=transaction_data)
-        if transaction_serializer.is_valid():
-            client.verify_payment_signature(
-                razorpay_payment_id = transaction_serializer.validated_data.get("payment_id"),
-                razorpay_order_id = transaction_serializer.validated_data.get("razorpay_order_id"),
-                razorpay_signature = transaction_serializer.validated_data.get("signature")
+
+        res = request.data
+
+        if not isinstance(res, dict):
+            return Response({'error': 'Invalid response format'}, status=status.HTTP_400_BAD_REQUEST)
+
+        params_dict = {
+            'razorpay_payment_id': res.get('razorpay_paymentId'),
+            'razorpay_order_id': res.get('razorpay_orderId'),
+            'razorpay_signature': res.get('razorpay_signature')
+        }
+
+        # verifying the signature
+        verification_status = client.utility.verify_payment_signature(params_dict)
+
+        if verification_status:
+            order_oid = res.get("order")
+            order = get_object_or_404(Order, oid=order_oid)
+            amt = res.get("amount")
+            amount =int(amt)/100
+            trans = Transactions.objects.create(
+                order = order,
+                amount=amount,
+                payment_id=res.get("razorpay_paymentId"),
+                razorpay_order_id=res.get("razorpay_orderId"),
+                signature=res.get("razorpay_signature")
             )
-            transaction_serializer.save()
-            response = {
-                "status_code": status.HTTP_201_CREATED,
-                "message": "transaction created"
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
-        else:
-            response = {
-                "status_code": status.HTTP_400_BAD_REQUEST,
-                "message": "bad request",
-                "error": transaction_serializer.errors
-            }
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            order.isPaid = True
+            order.save()
+            serializer = TransactionSerializer(trans, many=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response({'status': 'Payment Failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ViewOrdersView( GenericAPIView,
+                      ListModelMixin):
+
+    serializer_class =  OrderItemSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = self.request.user
+        order = Order.objects.filter(user=user)
+        orders = OrderItem.objects.filter(order__in=order)
+        return orders
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

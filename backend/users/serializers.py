@@ -76,7 +76,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["email"]
-
+    
     def validate(self, attrs):
         email = attrs.get("email")
         if User.objects.filter(email=email).exists():

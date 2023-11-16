@@ -20,6 +20,8 @@ import ResetEmailPage from './pages/ResetEmailPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import AddressPage from './pages/AddressPage';
 import CheckoutPage from './pages/CheckoutPage';
+import OrdersPage from './pages/OrdersPage';
+import PrivateRoutes from './Utils/privateRoutes';
 function App() {
   const {access_token} = useSelector(state => state.auth)
   useEffect(() => {
@@ -30,22 +32,25 @@ function App() {
   return (
     <>
       <Container fluid>
-      <Routes>
-        <Route path="/" exact element={access_token?<Layout/>: <Navigate to="/signin"/>}/>
-        <Route index element={<HomePage/>}/>
-        <Route path="/signin" element={!access_token ?<LoginPage/>: <Navigate to="/"/>}/>
-        <Route path="/signup" element={<RegisterPage/>}/>
-        <Route path="*" element={<NotFound/>}/>
-        <Route path="/products/:pid" element={<SinglePage/>}/>
-        <Route path="/categories/:cid" element={<CategoryPage/>}/>
-        <Route path="cart" element={<CartPage/>}/>
-        <Route path="/change_password" element={<ChangePassword/>}/>
-        <Route path="/send_password_reset_email" element={<ResetEmailPage/>}/>
-        <Route path="api/users/reset/:uid/:token" element={<ResetPasswordPage/>}/>
-        <Route path="/shippingaddress" element={<AddressPage/>}/>
-        <Route path="/checkout" element={<CheckoutPage/>}/>
-      </Routes>
-      <ToastContainer/>
+        <Routes>
+          <Route path="/" exact element={access_token?<Layout/>: <Navigate to="/signin"/>}/>
+          <Route index element={<HomePage/>}/>
+          <Route path="/signin" element={!access_token ?<LoginPage/>: <Navigate to="/"/>}/>
+          <Route path="/signup" element={<RegisterPage/>}/>
+          <Route path="*" element={<NotFound/>}/>
+          <Route element={<PrivateRoutes/>}>
+            <Route path="/products/:pid" element={<SinglePage/>}/>
+            <Route path="/categories/:cid" element={<CategoryPage/>}/>
+            <Route path="cart" element={<CartPage/>}/>
+            <Route path="/change_password" element={<ChangePassword/>}/>
+            <Route path="/send_password_reset_email" element={<ResetEmailPage/>}/>
+            <Route path="api/users/reset/:uid/:token" element={<ResetPasswordPage/>}/>
+            <Route path="/shippingaddress" element={<AddressPage/>}/>
+            <Route path="/checkout" element={<CheckoutPage/>}/>
+            <Route path="/orders" element={<OrdersPage/>}/>
+          </Route>
+        </Routes>
+        <ToastContainer/>
       </Container>
     </>
   )

@@ -88,7 +88,7 @@ const Header = () => {
                     <Link className='bg-white text-dark ms-3 text-decoration-none' to="/cart">Cart <FaShoppingCart /></Link>
                   </Nav.Link><NavDropdown className='ms-4' title={data.username} id="navbarScrollingDropdown">
                       <NavDropdown.Item><Button className='bg-white text-dark  btn-outline-light' onClick={handleLogout}>Logout</Button></NavDropdown.Item>
-                      <NavDropdown.Item><Link className='bg-white text-dark ms-3 text-decoration-none' to="">Orders</Link></NavDropdown.Item>
+                      <NavDropdown.Item><Link className='bg-white text-dark ms-3 text-decoration-none' to="/orders">Orders</Link></NavDropdown.Item>
                       <NavDropdown.Item><Link to="/change_password" className='bg-white text-dark ms-3 text-decoration-none' >Change Password</Link></NavDropdown.Item>
                     </NavDropdown></>
               :

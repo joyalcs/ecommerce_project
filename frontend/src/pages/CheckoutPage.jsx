@@ -18,14 +18,30 @@
   import {getTotal} from '../features/Cart/CartSlice';
   import { useAddOrderItemMutation } from '../services/order/orderApi';
   import useRazorpay from "react-razorpay";
-  import { useParams } from 'react-router-dom';
+  import axios from 'axios';
+  import { newCart } from '../features/Cart/CartSlice';
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement('script')
+      script.src = src
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
+  }
   const CheckoutPage = () => {
     const [radioValue, setRadiovalue] = useState("");
     const [addOrderItem] = useAddOrderItemMutation();
     const navigate = useNavigate();
     const [Razorpay] = useRazorpay();
     const { access_token } = getToken();
-    const {oid} = useParams();
+    // const dispatch = useDispatch();
+
+
     const { data: addresses, isLoading, isSuccess, isError, error } = useShowShippingAddressQuery(
       access_token
     );
@@ -61,7 +77,7 @@
       dispatch(getTotal());
     }, [cartState, dispatch]);
 
-    const complete_order = (paymentID, orderID, signature)=>{
+    const complete_order = (paymentID, orderID, signature,amount,order)=>{
       axios({
           method: 'post',
           url: 'http://127.0.0.1:8000/api/transaction/',
@@ -69,7 +85,9 @@
               "payment_id": paymentID,
               "order_id": orderID,
               "signature": signature,
-              "amount": amount
+              "amount": amount,
+              "order": order
+
           }
       })
       .then((response)=>{
@@ -91,16 +109,14 @@
         cartQuantity: item.cartQuantity,
         price: item.price,
       }));
-          // Move the actualData creation inside the try block
       const actualData = {
         orderItems: orderItems,
         shippingAddress: radioValue,
         totalPrice: cartState.cartTotalAmount,
 
       };
-      let order_id;
+      let order;
 
-      // Assuming the addOrderItem function returns a Promise
         const res = await addOrderItem({ actualData, access_token });
 
         if (res.error) {
@@ -109,59 +125,57 @@
 
         if (res.data) {
           console.log(res.data);
-          order_id = res.data.order_id;
+          order = res.data.oid;
         }
-        // const order_id = res.data.order_id
-        ////////////////////////////////////////////////////
-      try {
-        console.log(order_id);
-        // console.log(process.env.REACT_APP_RAZORPAY_KEY_ID)
-        const options = {
-          key: "rzp_test_BoC9HAQOUQZLs3", // Enter the Key ID generated from the Dashboard
-          name: "eShop",
-          description: "Test Transaction",
-          image: "https://example.com/your_logo",
-          order_id: order_id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
-          handler: function (response) {
+      ////////////////////////////////////////////////////
+      const sdk = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+      if (!sdk) {
+        alert('Failure loading the Razorpay SDK. PLease make sure you are connected to the internet')
+        return
+      }
+      const orderData = await axios.post('http://127.0.0.1:8000/api/payment/', {
+        amount: cartState.cartTotalAmount*100
+      })
+      const { amount, currency, order_id } = orderData.data
+      const options = {
+        key: "rzp_test_BoC9HAQOUQZLs3", // Enter the Key ID generated from the Dashboard
+        amount: amount.toString(),
+        currency: currency,
+        name: "Test Company",
+        description: "Test Transaction",
+        image:"https://example.com/your_logo" ,
+        order_id: order_id,
+        handler: async function (response) {
+            const razorpay_paymentId = response.razorpay_payment_id
+            const razorpay_orderId = response.razorpay_order_id
+            const razorpay_signature = response.razorpay_signature
 
-            //complete order
-            complete_order(
-              response.razorpay_payment_id,
-              response.razorpay_order_id,
-              response.razorpay_signature,
-            )
-          },
-          prefill: {
-            name: "joyal",
+            const res = await axios.post('http://127.0.0.1:8000/api/verify/', {
+              order,
+              amount,
+              razorpay_paymentId,
+              razorpay_orderId,
+              razorpay_signature
+            })
+            console.log( response.razorpay_payment_id);
+            console.log( response.razorpay_order_id);
+            console.log(response.razorpay_signature);
+            console.log(cartState.cartTotalAmount)
+            console.log(order)
+            alert(res.data.status)
+        },
+        prefill: {
+            name: "Joyal",
             email: "joyalcs22@gmail.com",
             contact: "7034130100",
-          },
-          notes: {
-            address: "Razorpay Corporate Office",
-          },
-          theme: {
-            color: "#3399cc",
-          },
-        };
-
-        const rzp1 = new Razorpay(options);
-        rzp1.on("payment.failed", function (response) {
-          alert(response.error.code);
-          alert(response.error.description);
-          alert(response.error.source);
-          alert(response.error.step);
-          alert(response.error.reason);
-          alert(response.error.metadata.order_id);
-          alert(response.error.metadata.payment_id);
-        });
-          rzp1.open();
-      } catch (error) {
-        console.log(error)
-      }
-
-      // .catch((error)=>{
-      //   console.log(error);
-      // })
+        },
+        theme: {
+            color: "#61dafb",
+        },
+    };
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
+    dispatch(newCart());
     };
 
   return (

@@ -2,6 +2,7 @@ from django.db import models
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from users.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -92,8 +93,7 @@ class Order(models.Model):
     isDelivered = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add= True)
 
-    def __str__(self) -> str:
-        return self.createdAt
+
 
 class OrderItem(models.Model):
     oiid = ShortUUIDField(unique=True, length=10, max_length=20, prefix="orditem")
@@ -108,9 +108,8 @@ class OrderItem(models.Model):
         self.name
 
 class Transactions(models.Model):
-    transid = ShortUUIDField(unique=True, length=10, max_length=20, prefix="trans")
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    amount = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     payment_id = models.CharField(max_length=200, verbose_name="Payment ID")
     razorpay_order_id = models.CharField(max_length=200, verbose_name="Order ID")
     signature = models.CharField(max_length=500, verbose_name="Signature", blank=True, null=True)

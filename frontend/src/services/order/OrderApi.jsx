@@ -18,7 +18,32 @@ export const OrderApi = createApi({
 
                 }
             }
+        }),
+        razorpayOrder: builder.mutation({
+            query: ({razorpayData, access_token}) => {
+                return {
+                    url: 'payment/',
+                    method: 'POST',
+                    body: razorpayData,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `Bearer ${access_token}`,
+                    }
+
+                }
+            }
+        }),
+        getOrders: builder.query({
+            query: (access_token) => {
+                return{
+                    url: 'orders/',
+                    method: 'GET',
+                    headers: {
+                        'authorization': `Bearer ${access_token}`
+                    }
+                }
+            }
         })
     })
 })
-export const {useAddOrderItemMutation} = OrderApi;
+export const {useAddOrderItemMutation, useRazorpayOrderMutation, useGetOrdersQuery} = OrderApi;
