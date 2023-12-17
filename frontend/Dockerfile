@@ -1,17 +1,13 @@
-FROM node:21
+FROM node:18-alpine as BUILD_IMAGE
 
 WORKDIR /frontend
 
 COPY package.json  ./
 
-RUN npm i
-RUN npm install react-redux
-RUN rm package-lock.json
+RUN npm install
 
 
-COPY package.json /frontend/package.json
-COPY package-lock.json /frontend/package-lock.json
 
-EXPOSE 5173
+COPY . .
 
-CMD ["npm", "run", "dev"]
+RUN  npm run build

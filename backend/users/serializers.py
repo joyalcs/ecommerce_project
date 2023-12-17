@@ -76,7 +76,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["email"]
-    
+
     def validate(self, attrs):
         email = attrs.get("email")
         if User.objects.filter(email=email).exists():
@@ -86,7 +86,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             uid = str(user.id)
             print('Encoded UID', uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            link = 'http://localhost:5173/api/users/reset/'+uid+'/'+token
+            link = 'http://localhost:3000/api/users/reset/'+uid+'/'+token
 
             body = 'Hai, You can click the link for reset the password '+link
             data = {

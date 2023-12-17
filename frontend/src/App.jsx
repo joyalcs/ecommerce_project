@@ -22,6 +22,7 @@ import AddressPage from './pages/AddressPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
 import PrivateRoutes from './Utils/privateRoutes';
+import { ProductsPage } from './pages/ProductsPage';
 function App() {
   const {access_token} = useSelector(state => state.auth)
   useEffect(() => {
@@ -37,17 +38,18 @@ function App() {
           <Route index element={<HomePage/>}/>
           <Route path="/signin" element={!access_token ?<LoginPage/>: <Navigate to="/"/>}/>
           <Route path="/signup" element={<RegisterPage/>}/>
+          <Route path="/send_password_reset_email" element={<ResetEmailPage/>}/>
+          <Route path="api/users/reset/:uid/:token" element={<ResetPasswordPage/>}/>
           <Route path="*" element={<NotFound/>}/>
           <Route element={<PrivateRoutes/>}>
             <Route path="/products/:pid" element={<SinglePage/>}/>
             <Route path="/categories/:cid" element={<CategoryPage/>}/>
             <Route path="cart" element={<CartPage/>}/>
             <Route path="/change_password" element={<ChangePassword/>}/>
-            <Route path="/send_password_reset_email" element={<ResetEmailPage/>}/>
-            <Route path="api/users/reset/:uid/:token" element={<ResetPasswordPage/>}/>
             <Route path="/shippingaddress" element={<AddressPage/>}/>
             <Route path="/checkout" element={<CheckoutPage/>}/>
             <Route path="/orders" element={<OrdersPage/>}/>
+            <Route path="/products-filter" element={<ProductsPage/>}/>
           </Route>
         </Routes>
         <ToastContainer/>

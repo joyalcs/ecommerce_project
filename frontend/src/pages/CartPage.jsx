@@ -23,7 +23,7 @@ export const CartPage = () => {
 
     <div className='cart-container text-align-center'>
         <Header/>
-        <h2>Shopping Cart</h2>
+        <h2 className='mt-5 p-3'>Shopping Cart</h2>
         {cartState.cartItems.length===0 ? (
             <div className='cart-empty '>
                 <p>Your Cart is empty</p>

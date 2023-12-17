@@ -96,7 +96,7 @@ const LoginPage = () => {
                   label="Password"
                   type="password"
                   id="password"
-
+                  autoComplete="current-password"
                 />
               </Grid>
             </Grid>

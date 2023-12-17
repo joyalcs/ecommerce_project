@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React,  { useState, useEffect }from 'react';
 import { Row, Col, Image, ListGroup, Button, Card} from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import Rating from '../components/Rating';
@@ -10,35 +10,51 @@ import { addToCart } from '../features/Cart/CartSlice';
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import { useGetProductQuery } from '../services/products/ProductApi';
-
+import { useShowReviewsQuery } from '../services/Review/reviewApi';
+import AddReview from '../components/AddReview';
+import ViewReviews from '../components/ViewReviews';
+import { getToken } from '../services/localStorageService';
 const SinglePage = () => {
   const [quantity, setQuantity] = useState(1)
   const { pid } = useParams();
   const dispatch = useDispatch();
-  const [cartQuantity, setCartQuantity] = useState(0);
   const navigate = useNavigate();
+  const {access_token} = getToken()
+  const [review, setReview] = useState([]);
+
   const {
     data: product,
     isLoading,
     isSuccess,
-    isError,
-    error
+    // isError,
+    // error
   } = useGetProductQuery(pid);
-  const increaseQuantity = (e) => {
-    e.preventDefault();
-    if (product.stock_count >= quantity){
-    setQuantity(quantity + 1);
-    }else{
-      toast.error("Out of stock", {position:'bottom-left'})
-    }  };
 
-  const decreaseQuantity = (e) => {
-    e.preventDefault();
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-
+  const {
+    data: reviews,
+    iserror,
+    error
+  } = useShowReviewsQuery({access_token,pid});
+  useEffect(() => {
+    if (reviews) {
+      setReview(reviews);
     }
-  };
+  }, [reviews]);
+  // const increaseQuantity = (e) => {
+  //   e.preventDefault();
+  //   if (product.stock_count >= quantity){
+  //   setQuantity(quantity + 1);
+  //   }else{
+  //     toast.error("Out of stock", {position:'bottom-left'})
+  //   }  };
+
+  // const decreaseQuantity = (e) => {
+  //   e.preventDefault();
+  //   if (quantity > 1) {
+  //     setQuantity(quantity - 1);
+
+  //   }
+  // };
 
   const addToCartHandler = () =>{
 
@@ -67,8 +83,26 @@ const SinglePage = () => {
       </section>
     );
   }
+  let reviewsData;
 
+  // if (Loading) {
+  //   reviewsData = <Loader />;
+  // } else if (Success) {
+  reviewsData = reviews ? (
+      reviews.map((review) => (
+        <Col key={review.rid} sm={12} md={6} lg={4} xl={3}>
+          <ViewReviews review={review} />
+        </Col>
+      ))
+    ) : null;
+    if (error) {
+      reviewsData=
+        <div className="alert alert-danger" role="alert">
+          <p>You are already reviewed</p>
+        </div>
 
+    }
+// console.log(reviewsData);
   return (
     <div>
       <Header />
@@ -111,7 +145,7 @@ const SinglePage = () => {
                       <Col>{product.stock_count > 0 ? 'In Stock' : 'Out Of Stock'}</Col>
                     </Row>
                   </ListGroup.Item>
-                  {
+                  {/* {
                     product.stock_count > 0 && (
                       <ListGroup.Item>
                         <Row>
@@ -136,7 +170,7 @@ const SinglePage = () => {
                         </Row>
                       </ListGroup.Item>
                     )
-                  }
+                  } */}
                   <ListGroup.Item className='mx-auto'>
                     <Button
                       onClick={()=>addToCartHandler(product)}
@@ -149,6 +183,15 @@ const SinglePage = () => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+            <AddReview productId={product.pid}/>
+            </Col>
+            <Col md={6} className='mt-5'>
+              <h4>Reviews and Ratings</h4>
+                {reviewsData}
             </Col>
           </Row>
         </div>

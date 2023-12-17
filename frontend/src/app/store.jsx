@@ -8,6 +8,7 @@ import  authReducer  from '../features/User/authSlice';
 import userReducer from '../features/User/userSlice';
 import { AddressApi } from '../services/address/AddressApi';
 import { OrderApi } from '../services/order/orderApi';
+import { reviewApi } from '../services/Review/reviewApi';
 
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     [CategoryApi.reducerPath]: CategoryApi.reducer,
     [AddressApi.reducerPath]: AddressApi.reducer,
     [OrderApi.reducerPath]: OrderApi.reducer,
+    [reviewApi.reducerPath]: reviewApi.reducer,
 
   },
   middleware: (getDefaultMiddleware) =>
@@ -27,7 +29,9 @@ export const store = configureStore({
                                 ProductApi.middleware,
                                 CategoryApi.middleware,
                                 AddressApi.middleware,
-                                OrderApi.middleware)
+                                OrderApi.middleware,
+                                reviewApi.middleware,
+                              )
 });
 
 setupListeners(store.dispatch)

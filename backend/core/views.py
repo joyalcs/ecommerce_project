@@ -2,14 +2,15 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin,RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,DestroyModelMixin
-from .models import Product, Category, ShippingAddress,Order, OrderItem, Transactions
-from .serializers import ProductSerializer, CategorySerializer, ShippingAddressSerializer, OrderSerializer, TransactionSerializer, OrderItemSerializer
+from .models import Product, Category, ShippingAddress,Order, OrderItem, Transactions, Review
+from .serializers import ProductSerializer, CategorySerializer, ShippingAddressSerializer, OrderSerializer, TransactionSerializer, OrderItemSerializer, ReviewSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 import razorpay
+from rest_framework import filters
 
 # Create your views here.
 
@@ -34,12 +35,24 @@ class ProductsView(GenericAPIView, ListModelMixin, RetrieveModelMixin):
     queryset = Product.objects.all().order_by("-id")
     serializer_class = ProductSerializer
     lookup_field ="pid"
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
 
     def get(self, request, *args, **kwargs):
         pid = kwargs.get("pid")
         if pid is not None:
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
+
+    # def get_queryset(self):
+    #     qs = Product.objects.all()
+    #     name = self.request.query_params.get('name')
+    #     print(name)
+    #     if name is not None:
+    #         qs = Product.objects.filter(name__icontains=name)
+    #     print(qs)
+    #     return qs
+
 
 class ShippingAddressView(GenericAPIView,
                           ListModelMixin,
@@ -192,3 +205,46 @@ class ViewOrdersView( GenericAPIView,
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+class ReviewView(APIView):
+    def post(self , request):
+        user = request.user
+        productId = request.data['product']
+        data = request.data
+        product = get_object_or_404(Product, pid=productId)
+        alreadyExist = Review.objects.filter(product=product, user=user).first()
+
+        if alreadyExist:
+            content =  {'detail': "Product already Reviewed"}
+
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        elif data['rating'] == 0:
+            content = {'detail': "Please select a rating"}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            review = Review.objects.create(
+                user=user,
+                product=product,
+                name = user.username,
+                rating = data['rating'],
+                comment =data['review']
+            )
+            reviews = []
+            reviews = Review.objects.filter(product=product)
+            product.numReviews = len(reviews)
+
+            total = 0
+            for i in reviews:
+                total += i.rating
+
+            product.rating = total / len(reviews)
+            product.save()
+            serializer = ReviewSerializer(review, many=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get(self, request, pid):
+        product = get_object_or_404(Product, pid=pid)
+        reviews = Review.objects.filter(product=product)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)

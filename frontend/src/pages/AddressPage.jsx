@@ -13,11 +13,13 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAddShippingAddressMutation } from '../services/address/AddressApi';
 import { getToken } from '../services/localStorageService';
+import { useShowShippingAddressQuery } from '../services/address/AddressApi';
 
 const AddressPage = () => {
     const theme = createTheme();
     const navigate = useNavigate();
     const {access_token} = getToken()
+    const {refetch} =useShowShippingAddressQuery(access_token);
     const [addShippingAddress] = useAddShippingAddressMutation();
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -35,6 +37,7 @@ const AddressPage = () => {
         }
         if(res.data){
             console.log(res.data)
+            refetch();
 
         }
         document.querySelector('form').reset();

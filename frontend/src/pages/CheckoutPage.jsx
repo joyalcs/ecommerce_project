@@ -162,7 +162,7 @@
             console.log(response.razorpay_signature);
             console.log(cartState.cartTotalAmount)
             console.log(order)
-            alert(res.data.status)
+            alert("Payment Sucessfully Completed")
         },
         prefill: {
             name: "Joyal",

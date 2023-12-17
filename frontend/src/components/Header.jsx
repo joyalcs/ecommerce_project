@@ -21,10 +21,12 @@ import "./styles/Header.css"
 
 
 const Header = () => {
+    const [searchTxt, setSearchTxt] = useState('')
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {access_token} = getToken();
     const {data, isSuccess} = useGetUserQuery(access_token);
+
     console.log(data);
     const handleLogout=()=>{
       dispatch(unsetUserInfo({ username: "", email: "" }))
@@ -35,7 +37,6 @@ const Header = () => {
         position: 'bottom-left',
       });
       navigate('/signin');
-
     }
     const [userData, setUserData] = useState({
       email: "",
@@ -57,6 +58,12 @@ const Header = () => {
         }))
       }
     }, [data, isSuccess, dispatch])
+    // const onSubmit  = (e) => {
+    //   e.preventDefault();
+    //   const { data:product} = useGetProductsQuery(searchTxt);
+    // };
+    // setSearchTxt("")
+
     return (
         <Container fluid>
           <Navbar
@@ -71,21 +78,26 @@ const Header = () => {
             <Navbar.Collapse id="navbarScroll">
               <Nav
                 className="me-auto my-2 my-lg-0"
-                style={{ maxHeight: '100px' }}
+                style={{ maxHeight: '100px', marginLeft: '29rem' }}
                 navbarScroll
               >
-              <Form className="d-flex mx-5 px-5">
+               {/* <Form className="d-flex mx-5 px-5">
                 <Form.Control
                   type="search"
                   placeholder="Search"
                   className="me-2"
                   aria-label="Search"
+                  value = {searchTxt}
+                  onChange={e=>setSearchTxt(e.target.value)}
                 />
-                <Button variant="outline-success"><AiOutlineSearch/></Button>
-              </Form>
+                <Button on variant="outline-success"><AiOutlineSearch/></Button>
+              </Form> */}
               {access_token && data ?
-                <><Nav.Link className='navItem1 ' href="#">
-                    <Link className='bg-white text-dark ms-3 text-decoration-none' to="/cart">Cart <FaShoppingCart /></Link>
+                <><Nav.Link className='navItem1' href="#">
+                  <Link className='bg-white text-dark ms-3 text-decoration-none' to="/products-filter"><AiOutlineSearch/></Link>
+                </Nav.Link>
+                  <Nav.Link className='navItem2' href="#">
+                    <Link className='bg-white text-dark  text-decoration-none' to="/cart">Cart <FaShoppingCart /></Link>
                   </Nav.Link><NavDropdown className='ms-4' title={data.username} id="navbarScrollingDropdown">
                       <NavDropdown.Item><Button className='bg-white text-dark  btn-outline-light' onClick={handleLogout}>Logout</Button></NavDropdown.Item>
                       <NavDropdown.Item><Link className='bg-white text-dark ms-3 text-decoration-none' to="/orders">Orders</Link></NavDropdown.Item>

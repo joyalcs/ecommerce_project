@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom'
 import { Card } from 'react-bootstrap'
 
 const CategoryCard = ({category}) => {
+  const cardStyle = {
+    height : '18rem',
+  }
   const linkStyle = {
     textDecoration: 'none',
   };
   return (
-    <Card className="my-3 p-3 rounded ">
+    <Card className="my-3 p-3 rounded " style={cardStyle}>
         <Link to={`/categories/${category.cid}`} style={linkStyle}>
             <Card.Img src={category.image} />
             <Card.Body className='text-dark'>

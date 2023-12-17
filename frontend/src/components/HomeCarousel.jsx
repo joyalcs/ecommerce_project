@@ -15,7 +15,7 @@ const HomeCarousel = () => {
               <h3>Sunglass</h3>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item>
+          {/* <Carousel.Item>
             <img src={clockImage} height={500} width={1290} className='img-fluid' alt="First Slide" />
             <Carousel.Caption>
               <h3>Watch</h3>
@@ -27,7 +27,7 @@ const HomeCarousel = () => {
               <h3>Caps</h3>
 
             </Carousel.Caption>
-          </Carousel.Item>
+          </Carousel.Item> */}
         </Carousel>
         </Container>
       );

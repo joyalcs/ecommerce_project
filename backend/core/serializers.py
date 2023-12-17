@@ -1,13 +1,24 @@
 from rest_framework import serializers
-from .models import Product, Category, ShippingAddress, OrderItem, Order, Transactions
+from .models import Product, Category, ShippingAddress, OrderItem, Order, Transactions, Review
 from users.serializers import UserSerializer
 from users.utils import Util
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+
 class ProductSerializer(serializers.ModelSerializer):
+    # reviews = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Product
         fields = '__all__'
 
+    # def get_reviews(self, obj):
+    #     reviews = obj.review_set.all()
+    #     serializer = ReviewSerializer(reviews, many=True)
+    #     return serializer.data
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,3 +81,4 @@ class TransactionSerializer(serializers.ModelSerializer):
         Util.send_email(data)
 
         return attrs
+
