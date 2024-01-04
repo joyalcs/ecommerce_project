@@ -16,7 +16,7 @@
   import { useSelector } from 'react-redux';
   import { useDispatch } from 'react-redux';
   import {getTotal} from '../features/Cart/CartSlice';
-  import { useAddOrderItemMutation } from '../services/order/orderApi';
+  import { useAddOrderItemMutation } from '../services/order/OrderApi';
   import useRazorpay from "react-razorpay";
   import axios from 'axios';
   import { newCart } from '../features/Cart/CartSlice';

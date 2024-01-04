@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router-dom';
-import { useGetCategoryQuery } from '../services/categories/categoryApi';
+import { useGetCategoryQuery } from '../services/categories/CategoryApi';
 import Loader from '../components/Loader';
 import { Row, Col } from 'react-bootstrap';
 import { ProductCard } from '../components/ProductCard';

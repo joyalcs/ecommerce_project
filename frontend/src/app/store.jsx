@@ -3,11 +3,11 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import cartReducer from '../features/Cart/CartSlice';
 import { userAuthApi } from '../services/user/userAuthApi'
 import { ProductApi } from '../services/products/ProductApi';
-import { CategoryApi } from '../services/categories/categoryApi';
+import {CategoryApi} from '../services/categories/CategoryApi'
 import  authReducer  from '../features/User/authSlice';
 import userReducer from '../features/User/userSlice';
 import { AddressApi } from '../services/address/AddressApi';
-import { OrderApi } from '../services/order/orderApi';
+import {OrderApi} from '../services/order/OrderApi'
 import { reviewApi } from '../services/Review/reviewApi';
 
 

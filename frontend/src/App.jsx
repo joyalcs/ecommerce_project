@@ -21,7 +21,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import AddressPage from './pages/AddressPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
-import PrivateRoutes from './Utils/privateRoutes';
+import PrivateRoutes from './Utils/PrivateRoutes'
 import { ProductsPage } from './pages/ProductsPage';
 function App() {
   const {access_token} = useSelector(state => state.auth)

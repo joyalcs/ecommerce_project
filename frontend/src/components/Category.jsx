@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col} from 'react-bootstrap'
 import CategoryCard from "./CategoryCard"
-import { useGetCategoriesQuery } from '../services/categories/categoryApi'
+import { useGetCategoriesQuery } from '../services/categories/CategoryApi'
 
 const Category = () => {
 

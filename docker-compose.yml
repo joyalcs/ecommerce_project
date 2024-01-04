@@ -25,10 +25,10 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./frontend:/frontend
+      - ./frontend/src:/frontend/src
     depends_on:
       - backend
-
+    command: sh -c "npm run dev"
   db:
     image: postgres:latest
     ports:

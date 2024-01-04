@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import { Row, Col, Image } from 'react-bootstrap';
 import { getToken } from '../services/localStorageService';
-import { useGetOrdersQuery } from '../services/order/orderApi';
+import { useGetOrdersQuery } from '../services/order/OrderApi';
 
 const OrdersPage = () => {
   const { access_token } = getToken();

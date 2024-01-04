@@ -31,7 +31,6 @@ const ChangePassword = () => {
         console.log(access_token);
         console.log(actualData);
         if(res.error){
-
             setServerMsg(res.error)
         }
         if (res.data) {

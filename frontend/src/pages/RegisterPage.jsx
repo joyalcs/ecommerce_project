@@ -8,6 +8,7 @@ import {
   Typography,
   Container,
   Alert,
+  AlertTitle
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material';
@@ -18,7 +19,7 @@ import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
   const theme = createTheme();
-  const [serverError, setServerError] =useState({})
+  const [serverMsg, setServerMsg] = useState({})
   const navigate = useNavigate();
   const [registerUser, { isLoading } ] = useRegisterUserMutation();
 
@@ -37,17 +38,20 @@ const RegisterPage = () => {
     }
     const res = await registerUser(actualData)
     if(res.error){
-      setServerError(res.error.data.errors)
+      setServerMsg(res.error)
+
     }
-    console.log(serverError);
     if(res.data){
+      setServerMsg(res.data)
       navigate("/signin")
     }
 
-    document.querySelector('form').reset();
 
+    document.querySelector('form').reset();
+    console.log(message);
   }
   return (
+
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
 
@@ -60,12 +64,19 @@ const RegisterPage = () => {
             marginTop: '8px',
           }}
         >
+
           <Avatar>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          {serverMsg.msg ? <Alert severity='error'>{serverMsg.msg}</Alert> : ''}
+          <Alert severity="info">
+          <AlertTitle>Info</AlertTitle>
+              Use any of the special characters on the password. Password eg: Password@123
+          </Alert>
+
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -153,6 +164,8 @@ const RegisterPage = () => {
               </Grid>
             </Grid>
           </form>
+
+
         </div>
       </Container>
     </ThemeProvider>
