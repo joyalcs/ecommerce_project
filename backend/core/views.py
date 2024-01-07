@@ -44,14 +44,6 @@ class ProductsView(GenericAPIView, ListModelMixin, RetrieveModelMixin):
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
 
-    # def get_queryset(self):
-    #     qs = Product.objects.all()
-    #     name = self.request.query_params.get('name')
-    #     print(name)
-    #     if name is not None:
-    #         qs = Product.objects.filter(name__icontains=name)
-    #     print(qs)
-    #     return qs
 
 
 class ShippingAddressView(GenericAPIView,
