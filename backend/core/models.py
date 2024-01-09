@@ -56,8 +56,8 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True, blank=True)
-    rating = models.IntegerField(null=True, blank=True)
-    comment = models.TextField(null=True,blank=True)
+    rating = models.IntegerField(default=0,null=False, blank=False)
+    comment = models.TextField(default='No Comment', null=False,blank=False)
     createdAt = models.DateTimeField(auto_now_add= True)
 
     def __str__(self) -> str:
