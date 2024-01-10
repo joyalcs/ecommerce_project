@@ -92,7 +92,7 @@ class ShippingAddressView(
 
 class OrderView(APIView):
     serializer_class = OrderSerializer
-    
+
     def post(self, request):
         user = request.user
         data = request.data

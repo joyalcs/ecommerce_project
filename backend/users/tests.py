@@ -104,7 +104,7 @@ class UserProfileViewTestCase(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        
+
 class UserChangePasswordTestCase(APITestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
@@ -145,6 +145,7 @@ class UserChangePasswordTestCase(APITestCase):
         response = self.client.post(self.url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+
 class SendPasswordResetEmailSerializerTest(APITestCase):
     @patch("users.utils.Util.send_email")
     def test_send_password_reset_email(self, mock_send_email):
@@ -166,7 +167,7 @@ class SendPasswordResetEmailSerializerTest(APITestCase):
         mock_send_email.assert_called_once_with(
             {
                 "subject": "Reset Your Password",
-                "body": 'Hai, You can click the link for reset the password http://localhost:3000/api/users/reset/{}/{}'.format(uid, token  ),
+                "body": 'Hai, You can click the link for reset the password http://localhost:3000/api/users/reset/{}/{}'.format(uid, token),
                 "to_email": "test@example.com",
             }
         )

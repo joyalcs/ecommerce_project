@@ -54,6 +54,7 @@ class SendResetPasswordEmailView(APIView):
             status=status.HTTP_200_OK,
         )
 
+
 @extend_schema(parameters=[OpenApiParameter(name="token", type=str)])
 class UserResetPasswordView(APIView):
     serializer_class = UserResetPasswordSerializer
