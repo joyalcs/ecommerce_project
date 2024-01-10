@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0019_remove_transactions_transid_and_more'),
+        ("core", "0019_remove_transactions_transid_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='review',
-            name='comment',
-            field=models.TextField(default='No Comment'),
+            model_name="review",
+            name="comment",
+            field=models.TextField(default="No Comment"),
         ),
         migrations.AlterField(
-            model_name='review',
-            name='rating',
+            model_name="review",
+            name="rating",
             field=models.IntegerField(default=0),
         ),
     ]

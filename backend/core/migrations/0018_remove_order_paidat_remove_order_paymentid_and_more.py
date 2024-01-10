@@ -6,31 +6,70 @@ import shortuuid.django_fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0017_alter_orderitem_order'),
+        ("core", "0017_alter_orderitem_order"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='paidAt',
+            model_name="order",
+            name="paidAt",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='paymentId',
+            model_name="order",
+            name="paymentId",
         ),
         migrations.CreateModel(
-            name='Transactions',
+            name="Transactions",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('transid', shortuuid.django_fields.ShortUUIDField(alphabet=None, length=10, max_length=20, prefix='trans', unique=True)),
-                ('amount', models.DecimalField(blank=True, decimal_places=2, max_digits=7, null=True)),
-                ('payment_id', models.CharField(max_length=200, verbose_name='Payment ID')),
-                ('razorpay_order_id', models.CharField(max_length=200, verbose_name='Order ID')),
-                ('signature', models.CharField(blank=True, max_length=500, null=True, verbose_name='Signature')),
-                ('paidAt', models.DateTimeField(auto_now_add=True)),
-                ('order', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.order')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "transid",
+                    shortuuid.django_fields.ShortUUIDField(
+                        alphabet=None,
+                        length=10,
+                        max_length=20,
+                        prefix="trans",
+                        unique=True,
+                    ),
+                ),
+                (
+                    "amount",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=7, null=True
+                    ),
+                ),
+                (
+                    "payment_id",
+                    models.CharField(max_length=200, verbose_name="Payment ID"),
+                ),
+                (
+                    "razorpay_order_id",
+                    models.CharField(max_length=200, verbose_name="Order ID"),
+                ),
+                (
+                    "signature",
+                    models.CharField(
+                        blank=True, max_length=500, null=True, verbose_name="Signature"
+                    ),
+                ),
+                ("paidAt", models.DateTimeField(auto_now_add=True)),
+                (
+                    "order",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="core.order",
+                    ),
+                ),
             ],
         ),
     ]

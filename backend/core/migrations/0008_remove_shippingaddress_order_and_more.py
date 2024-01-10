@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0007_remove_cartitems_cart_remove_cartitems_product_and_more'),
+        ("core", "0007_remove_cartitems_cart_remove_cartitems_product_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='shippingaddress',
-            name='order',
+            model_name="shippingaddress",
+            name="order",
         ),
         migrations.AddField(
-            model_name='shippingaddress',
-            name='phone_number',
+            model_name="shippingaddress",
+            name="phone_number",
             field=models.IntegerField(default=91, max_length=14),
         ),
     ]

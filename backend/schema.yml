@@ -1,0 +1,1247 @@
+openapi: 3.0.3
+info:
+  title: Ecommerce Project API
+  version: 0.0.0
+paths:
+  /api/{pid}/reviews/:
+    get:
+      operationId: reviews_retrieve_2
+      parameters:
+      - in: path
+        name: pid
+        schema:
+          type: string
+        required: true
+      tags:
+      - reviews
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+    post:
+      operationId: reviews_create_2
+      parameters:
+      - in: path
+        name: pid
+        schema:
+          type: string
+        required: true
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Review'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+  /api/categories/:
+    get:
+      operationId: categories_list
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{cid}/:
+    get:
+      operationId: categories_list_2
+      parameters:
+      - in: path
+        name: cid
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/order/:
+    post:
+      operationId: order_create
+      tags:
+      - order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/:
+    get:
+      operationId: orders_list
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+          description: ''
+  /api/payment/:
+    post:
+      operationId: payment_create
+      description: This API will create an order
+      tags:
+      - payment
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/products/:
+    get:
+      operationId: products_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{pid}/:
+    get:
+      operationId: products_list_2
+      parameters:
+      - in: path
+        name: pid
+        schema:
+          type: string
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/name=name/:
+    get:
+      operationId: products_name=name_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+  /api/reviews/:
+    get:
+      operationId: reviews_retrieve
+      tags:
+      - reviews
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+    post:
+      operationId: reviews_create
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Review'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/shippingaddress/:
+    get:
+      operationId: shippingaddress_list
+      tags:
+      - shippingaddress
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    post:
+      operationId: shippingaddress_create
+      tags:
+      - shippingaddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    patch:
+      operationId: shippingaddress_partial_update
+      tags:
+      - shippingaddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    delete:
+      operationId: shippingaddress_destroy
+      tags:
+      - shippingaddress
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/shippingaddress/{shid}/:
+    get:
+      operationId: shippingaddress_list_2
+      parameters:
+      - in: path
+        name: shid
+        schema:
+          type: string
+        required: true
+      tags:
+      - shippingaddress
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    post:
+      operationId: shippingaddress_create_2
+      parameters:
+      - in: path
+        name: shid
+        schema:
+          type: string
+        required: true
+      tags:
+      - shippingaddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingAddress'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    patch:
+      operationId: shippingaddress_partial_update_2
+      parameters:
+      - in: path
+        name: shid
+        schema:
+          type: string
+        required: true
+      tags:
+      - shippingaddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShippingAddress'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingAddress'
+          description: ''
+    delete:
+      operationId: shippingaddress_destroy_2
+      parameters:
+      - in: path
+        name: shid
+        schema:
+          type: string
+        required: true
+      tags:
+      - shippingaddress
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/users/change_password/:
+    post:
+      operationId: users_change_password_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChangePassword'
+          description: ''
+  /api/users/profile/:
+    get:
+      operationId: users_profile_retrieve
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+  /api/users/reset_password/{uid}/{token}/:
+    post:
+      operationId: users_reset_password_create
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: token
+        schema:
+          type: string
+      - in: path
+        name: uid
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserResetPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserResetPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserResetPassword'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResetPassword'
+          description: ''
+  /api/users/send_reset_password_email/:
+    post:
+      operationId: users_send_reset_password_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendPasswordResetEmail'
+          description: ''
+  /api/verify/:
+    post:
+      operationId: verify_create
+      tags:
+      - verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        cid:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          maxLength: 100
+        image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - name
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        orderItems:
+          type: string
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        oid:
+          type: string
+          maxLength: 20
+        taxPrice:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+        shippingPrice:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+          nullable: true
+        totalPrice:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+          nullable: true
+        isPaid:
+          type: boolean
+        isDelivered:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        shippingAddress:
+          type: integer
+      required:
+      - createdAt
+      - id
+      - orderItems
+      - user
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        oiid:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          nullable: true
+          maxLength: 200
+        qty:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+        image:
+          type: string
+          nullable: true
+          maxLength: 200
+        product:
+          type: integer
+        order:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - price
+    PatchedShippingAddress:
+      type: object
+      properties:
+        shid:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 200
+        city:
+          type: string
+          nullable: true
+          maxLength: 200
+        postalCode:
+          type: string
+          nullable: true
+          maxLength: 200
+        country:
+          type: string
+          nullable: true
+          maxLength: 200
+        phone_number:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        pid:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          maxLength: 100
+        image:
+          type: string
+          format: uri
+          nullable: true
+        brand:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 300
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+          nullable: true
+        numReviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+        offer_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,2})?$
+          nullable: true
+        stock_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        seller:
+          type: integer
+        category:
+          type: integer
+      required:
+      - brand
+      - category
+      - createdAt
+      - description
+      - id
+      - name
+      - price
+      - seller
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - password2
+      - username
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        rid:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          nullable: true
+          maxLength: 200
+        rating:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+        product:
+          type: integer
+      required:
+      - createdAt
+      - id
+      - product
+      - user
+    SendPasswordResetEmail:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+    ShippingAddress:
+      type: object
+      properties:
+        shid:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 200
+        city:
+          type: string
+          nullable: true
+          maxLength: 200
+        postalCode:
+          type: string
+          nullable: true
+          maxLength: 200
+        country:
+          type: string
+          nullable: true
+          maxLength: 200
+        phone_number:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    Transaction:
+      type: object
+      properties:
+        order:
+          type: integer
+          nullable: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        payment_id:
+          type: string
+          maxLength: 200
+        razorpay_order_id:
+          type: string
+          title: Order ID
+          maxLength: 200
+        signature:
+          type: string
+          nullable: true
+          maxLength: 500
+        paidAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - paidAt
+      - payment_id
+      - razorpay_order_id
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+      - id
+      - username
+    UserChangePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        password2:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - password
+      - password2
+    UserResetPassword:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        password2:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - password
+      - password2
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

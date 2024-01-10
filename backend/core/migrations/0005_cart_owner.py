@@ -6,16 +6,21 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('core', '0004_rename_cid_cart_cartid'),
+        ("core", "0004_rename_cid_cart_cartid"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cart',
-            name='owner',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='carts', to=settings.AUTH_USER_MODEL),
+            model_name="cart",
+            name="owner",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="carts",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

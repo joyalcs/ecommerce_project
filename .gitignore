@@ -1,1 +1,4 @@
 .env
+.coverage
+.flake8
+.htmlcov

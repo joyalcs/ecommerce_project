@@ -5,33 +5,34 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0014_remove_orderitem_image_remove_orderitem_name'),
+        ("core", "0014_remove_orderitem_image_remove_orderitem_name"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='items',
+            model_name="order",
+            name="items",
         ),
         migrations.RemoveField(
-            model_name='orderitem',
-            name='user',
+            model_name="orderitem",
+            name="user",
         ),
         migrations.AddField(
-            model_name='orderitem',
-            name='image',
+            model_name="orderitem",
+            name="image",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='orderitem',
-            name='name',
+            model_name="orderitem",
+            name="name",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='orderitem',
-            name='order',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.order'),
+            model_name="orderitem",
+            name="order",
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.SET_NULL, to="core.order"
+            ),
         ),
     ]

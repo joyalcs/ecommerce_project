@@ -1,0 +1,19 @@
+---
+    name: Checks
+
+    on: [push]
+
+    jobs:
+      test-lint:
+        name: Test, Lint and Black
+        runs-on: ubuntu-20.04
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Test
+            run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && python manage.py test"
+          - name: Lint
+            run: docker-compose run --rm backend sh -c "flake8"
+          - name: Black
+            run: docker-compose run --rm backend sh -c "black ."
+

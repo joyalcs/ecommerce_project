@@ -4,24 +4,23 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0006_remove_cart_owner'),
+        ("core", "0006_remove_cart_owner"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cartitems',
-            name='cart',
+            model_name="cartitems",
+            name="cart",
         ),
         migrations.RemoveField(
-            model_name='cartitems',
-            name='product',
+            model_name="cartitems",
+            name="product",
         ),
         migrations.DeleteModel(
-            name='Cart',
+            name="Cart",
         ),
         migrations.DeleteModel(
-            name='CartItems',
+            name="CartItems",
         ),
     ]

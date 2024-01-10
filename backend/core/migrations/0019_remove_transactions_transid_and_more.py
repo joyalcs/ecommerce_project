@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0018_remove_order_paidat_remove_order_paymentid_and_more'),
+        ("core", "0018_remove_order_paidat_remove_order_paymentid_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='transactions',
-            name='transid',
+            model_name="transactions",
+            name="transid",
         ),
         migrations.AlterField(
-            model_name='transactions',
-            name='amount',
+            model_name="transactions",
+            name="amount",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
     ]
