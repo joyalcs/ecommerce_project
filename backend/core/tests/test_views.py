@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 from django.urls import reverse
 from core.models import Category, Product, Review, ShippingAddress, Order
 
+
 class CategoriesProductsTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
@@ -255,3 +256,23 @@ class OrderTestCase(APITestCase):
         url = reverse('orders-get')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+class RazorpayPaymentTestCase(APITestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass@123',
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_payment_successful(self):
+        payload = {
+            'amount': 100.0
+        }
+        url = reverse('razorpay-payment')
+        response = self.client.post(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('order_id', response.data)
+        self.assertIn('amount', response.data)
+        self.assertIn('currency', response.data)
